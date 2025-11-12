@@ -20,6 +20,10 @@ jobs:
           cache: 'pnpm'
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
+        with:
+          version: 9.0.0  # align with package.json packageManager and ensure binary is installed
+      - name: pnpm version
+        run: pnpm -v
       - name: Get pnpm store directory
         id: pnpm-cache
         run: echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
