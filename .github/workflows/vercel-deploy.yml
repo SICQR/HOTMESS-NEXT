@@ -1,0 +1,69 @@
+name: Vercel Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - feature/**
+
+concurrency:
+  group: vercel-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip deploy]')"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.0.0
+
+      - name: Verify pnpm version
+        run: pnpm -v
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build (Next.js)
+        env:
+          NEXT_SAFE_MODE: '1'
+        run: pnpm build
+
+      - name: Decide deploy target
+        id: target
+        run: |
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            echo "ARGS=--prod" >> $GITHUB_OUTPUT
+          else
+            echo "ARGS=" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: ${{ steps.target.outputs.ARGS }}
+          working-directory: ./
+          alias-domains: ''
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+
+      - name: Output deployment info
+        if: success()
+        run: |
+          echo "Deployment triggered for ref: ${{ github.ref }}"
+          echo "Args used: ${{ steps.target.outputs.ARGS }}"
