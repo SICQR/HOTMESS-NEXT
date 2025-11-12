@@ -175,13 +175,15 @@ import { MobileMenu } from './components/MobileMenu';
 Design tokens live in `app/globals.css`.
 ```css
 --color-bg:#0A0A0A; --color-surface:#121212; --color-border:#262626; --color-text:#FFFFFF;
---color-text-muted:#999999; --color-primary:#FF2768; --color-accent:#6AE3FF;
+--color-text-muted:#B3B3B3; --color-primary:#FF2768; --color-accent:#6AE3FF;
 --radius-sm:0px; --radius-md:2px; --radius-lg:4px;
 ```
 Gradients & glow utilities:
 ```css
 .text-gradient-primary{background:linear-gradient(135deg,var(--color-primary),var(--color-accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .btn-glow{box-shadow:0 0 20px var(--color-primary)}
+.bg-gradient-brand{background-image:linear-gradient(135deg,var(--color-primary),var(--color-accent))}
+.border-neon{border:1px solid var(--color-primary);box-shadow:0 0 10px var(--color-primary)}
 ```
 
 ## Performance tactics

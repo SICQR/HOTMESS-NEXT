@@ -49,7 +49,7 @@ export default function AgeGateMenOnly() {
 
   return (
   <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="agegate-title" aria-describedby="agegate-desc" className="fixed inset-0 z-[70] grid place-items-center bg-black/80 p-6">
-      <form onSubmit={submit} className="w-full max-w-md bg-black text-white p-6 rounded-2xl border border-white/10 shadow-2xl" onClick={(e)=>e.stopPropagation()}>
+  <form onSubmit={submit} className="w-full max-w-md bg-[color:rgba(var(--color-bg-rgb)/0.95)] text-white p-6 rounded-2xl border border-token shadow-2xl" onClick={(e)=>e.stopPropagation()}>
         <h1 id="agegate-title" className="text-3xl md:text-5xl font-bold mb-2 uppercase">Confirm access</h1>
         <p id="agegate-desc" className="text-sm opacity-80 mb-4">Men‑only. You must be 18+. We use a cookie to remember your choice.</p>
         <label className="block text-sm mb-3">Date of birth
@@ -61,7 +61,7 @@ export default function AgeGateMenOnly() {
         <label className="flex items-center gap-2 text-sm mb-4">
           <input type="checkbox" checked={affirm} onChange={e=>setAffirm(e.target.checked)} /> I am 18+ and accept privacy & cookies.
         </label>
-        <button className="w-full bg-red-600 hover:bg-red-700 text-white uppercase px-5 py-3 rounded-2xl" type="submit">Enter</button>
+  <button className="w-full bg-[var(--color-primary)] hover:opacity-90 text-white uppercase px-5 py-3 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]" type="submit">Enter</button>
         <p className="text-xs mt-3 opacity-70">Aftercare is information/services, not medical advice.</p>
       </form>
     </div>

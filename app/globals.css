@@ -13,10 +13,24 @@ html, body { scroll-behavior: smooth; background: var(--color-bg); color: var(--
 	--color-bg-rgb:10 10 10;
 	--color-surface:#121212;
 	--color-border:#262626;
+	--color-border-strong:#3A3A3A; /* stronger divider for inputs/cards */
 	--color-text:#FFFFFF;
 	--color-text-muted:#B3B3B3; /* improved contrast over #999999 */
 	--color-primary:#FF2768;
 	--color-accent:#6AE3FF;
+	/* Semantic colors */
+	--color-success:#00FF88;
+	--color-warning:#FFB800;
+	--color-error:#FF2768; /* aligns with primary for error emphasis */
+	--color-info:#6AE3FF;  /* aligns with accent for info */
+
+	/* Spacing scale (optional) */
+	--spacing-xs:0.5rem; /* 8px */
+	--spacing-sm:1rem;   /* 16px */
+	--spacing-md:1.5rem; /* 24px */
+	--spacing-lg:2rem;   /* 32px */
+	--spacing-xl:3rem;   /* 48px */
+	--spacing-2xl:4rem;  /* 64px */
 	/* Typography scale (CSS custom properties for clamp usage) */
 	--font-family-heading:'Geist',system-ui,sans-serif;
 	--font-family-body:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
@@ -51,6 +65,7 @@ h3 { font-family: var(--font-family-heading); font-size: clamp(var(--h3-mobile),
 .bg-surface { background: var(--color-surface); }
 .text-muted { color: var(--color-text-muted); }
 .border-token { border-color: var(--color-border); }
+.border-strong { border-color: var(--color-border-strong); }
 .accent-primary { color: var(--color-primary); }
 .accent-cyan { color: var(--color-accent); }
 .btn-base { display:inline-flex; align-items:center; justify-content:center; font-weight:600; gap:.5rem; border-radius:.75rem; transition:background .2s, box-shadow .2s; }
@@ -69,7 +84,11 @@ h3 { font-family: var(--font-family-heading); font-size: clamp(var(--h3-mobile),
 	background-clip: text;
 	color: transparent;
 }
+.bg-gradient-brand { background-image: linear-gradient(135deg, var(--color-primary), var(--color-accent)); }
 .btn-glow { box-shadow: 0 0 20px var(--color-primary); }
+
+/* Neon border utility */
+.border-neon { border:1px solid var(--color-primary); box-shadow:0 0 10px var(--color-primary); }
 
 /* Removed duplicate gradient & radius declarations; consolidated above */
 .card-brutal { border-radius:var(--radius-sm); }
@@ -80,6 +99,16 @@ a { text-underline-offset: 2px; }
 
 /* Focus for accessibility */
 :focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+	*, *::before, *::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}
 
 /* Cards & surfaces */
 .card {
