@@ -127,6 +127,7 @@ node scripts/sign-go.js --partner hotmess --offer care --to https://hotmess.lond
 - Secrets never in client; only `NEXT_PUBLIC_*` is exposed. Server/edge secrets remain private.
 - Logging: optional `LOGTAIL_SOURCE_TOKEN` for structured logs (client → `/api/log` → sink; server can post directly).
 - Security headers enforced via global middleware (CSP nonce, Referrer-Policy, X-Frame-Options, Permissions-Policy). `/.well-known/security.txt` served.
+ - Security headers enforced via global proxy (`proxy.ts`) with CSP nonce, Referrer-Policy, X-Frame-Options, Permissions-Policy. `/.well-known/security.txt` served.
 ### HMAC Verification
 Secure affiliate link verification using HMAC signatures:
 
@@ -201,7 +202,37 @@ Example animation:
 - `edge/telegram.ts`: bot webhook; moderation and check‑ins.
 - `edge/globe_snapshot.ts`: listener snapshot feed.
 - `edge/sellers_submit.ts`: seller flows.
-- Deploy via `supabase functions deploy <name> --project-ref <ref>`
+
+Deploy
+
+```bash
+# Deploy all Edge Functions (choose the ones you need)
+supabase functions deploy postbacks analytics telegram globe_snapshot sellers_submit \
+  --project-ref <your-supabase-project-ref>
+```
+
+Local serve (per function)
+
+```bash
+# Serve a function locally with your env file
+supabase functions serve analytics --env-file .env.local
+```
+
+Secrets for functions
+
+- Set required keys for Edge Functions using Supabase secrets (server-only):
+
+```bash
+# Example (set the secrets you actually use; see .env.example)
+supabase secrets set \
+  LINK_SIGNING_SECRET=... \
+  LOGTAIL_SOURCE_TOKEN=... \
+  NEXT_PUBLIC_SITE_URL=https://your.site
+```
+
+Notes
+- Edge functions run on Deno; use Web APIs and avoid Node-only modules.
+- Keep server-only secrets out of client code; mirror only NEXT_PUBLIC_* in the browser.
 
 ## Roadmap (selected)
 - CSP + security.txt, rate limiting with Upstash, Playwright E2E flows.
