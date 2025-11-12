@@ -14,7 +14,7 @@ html, body { scroll-behavior: smooth; background: var(--color-bg); color: var(--
 	--color-surface:#121212;
 	--color-border:#262626;
 	--color-text:#FFFFFF;
-	--color-text-muted:#999999;
+	--color-text-muted:#B3B3B3; /* improved contrast over #999999 */
 	--color-primary:#FF2768;
 	--color-accent:#6AE3FF;
 	/* Typography scale (CSS custom properties for clamp usage) */
@@ -26,6 +26,8 @@ html, body { scroll-behavior: smooth; background: var(--color-bg); color: var(--
 	--line-height-body:1.7;
 	/* Breakpoints */
 	--bp-sm:640px; --bp-md:768px; --bp-lg:1024px; --bp-xl:1280px; --bp-2xl:1536px;
+	/* Brutalist radii */
+	--radius-sm:0px; --radius-md:2px; --radius-lg:4px;
 }
 
 body { font-family: var(--font-family-body); line-height: var(--line-height-body); }
@@ -69,14 +71,7 @@ h3 { font-family: var(--font-family-heading); font-size: clamp(var(--h3-mobile),
 }
 .btn-glow { box-shadow: 0 0 20px var(--color-primary); }
 
-/* Brutalist radii */
-:root { --radius-sm:0px; --radius-md:2px; --radius-lg:4px; }
-.card { border-radius: var(--radius-sm); }
-
-/* Gradients & brutalist radius tokens */
-.text-gradient-primary { background:linear-gradient(135deg,var(--color-primary),var(--color-accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-.btn-glow { box-shadow:0 0 20px var(--color-primary); }
-:root { --radius-sm:0px; --radius-md:2px; --radius-lg:4px; }
+/* Removed duplicate gradient & radius declarations; consolidated above */
 .card-brutal { border-radius:var(--radius-sm); }
 
 /* Type & rhythm */
