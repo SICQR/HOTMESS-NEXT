@@ -8,9 +8,6 @@ on:
 jobs:
   build-test:
     runs-on: ubuntu-latest
-    concurrency:
-      group: ci-${{ github.ref }}
-      cancel-in-progress: true
     steps:
       - uses: actions/checkout@v4
       - name: Setup pnpm
