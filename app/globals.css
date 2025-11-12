@@ -1,0 +1,94 @@
+/* Tailwind directives (build-time transformed) */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base */
+html, body { scroll-behavior: smooth; background: var(--color-bg); color: var(--color-text); }
+:root{color-scheme:dark;}
+:root {
+	--hero-gradient: radial-gradient(circle at 50% 80%, rgba(255,0,0,0.45), rgba(0,0,0,0) 70%);
+	/* Design Tokens */
+	--color-bg:#0A0A0A;
+	--color-bg-rgb:10 10 10;
+	--color-surface:#121212;
+	--color-border:#262626;
+	--color-text:#FFFFFF;
+	--color-text-muted:#999999;
+	--color-primary:#FF2768;
+	--color-accent:#6AE3FF;
+	/* Typography scale (CSS custom properties for clamp usage) */
+	--font-family-heading:'Geist',system-ui,sans-serif;
+	--font-family-body:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+	--h1-mobile:3.5rem; --h1-desktop:5rem;
+	--h2-mobile:2.5rem; --h2-desktop:3.5rem;
+	--h3-mobile:1.75rem; --h3-desktop:2.25rem;
+	--line-height-body:1.7;
+	/* Breakpoints */
+	--bp-sm:640px; --bp-md:768px; --bp-lg:1024px; --bp-xl:1280px; --bp-2xl:1536px;
+}
+
+body { font-family: var(--font-family-body); line-height: var(--line-height-body); }
+h1 { font-family: var(--font-family-heading); font-size: clamp(var(--h1-mobile), 6vw, var(--h1-desktop)); }
+h2 { font-family: var(--font-family-heading); font-size: clamp(var(--h2-mobile), 4.5vw, var(--h2-desktop)); }
+h3 { font-family: var(--font-family-heading); font-size: clamp(var(--h3-mobile), 3.2vw, var(--h3-desktop)); }
+
+/* Semantic heading utility classes */
+.heading-1 { font-family: var(--font-family-heading); font-size: clamp(var(--h1-mobile), 6vw, var(--h1-desktop)); letter-spacing:-0.02em; }
+.heading-2 { font-family: var(--font-family-heading); font-size: clamp(var(--h2-mobile), 4.5vw, var(--h2-desktop)); letter-spacing:-0.02em; }
+.heading-3 { font-family: var(--font-family-heading); font-size: clamp(var(--h3-mobile), 3.2vw, var(--h3-desktop)); letter-spacing:-0.02em; }
+
+/* Semantic body scale */
+.body-xs { font-size: 0.75rem; line-height: 1.2; }
+.body-sm { font-size: 0.875rem; line-height: 1.4; }
+.body-md { font-size: 1rem; line-height: 1.5; }
+.body-lg { font-size: 1.125rem; line-height: 1.55; }
+
+/* Utility classes leveraging tokens */
+.bg-base { background: var(--color-bg); }
+.bg-surface { background: var(--color-surface); }
+.text-muted { color: var(--color-text-muted); }
+.border-token { border-color: var(--color-border); }
+.accent-primary { color: var(--color-primary); }
+.accent-cyan { color: var(--color-accent); }
+.btn-base { display:inline-flex; align-items:center; justify-content:center; font-weight:600; gap:.5rem; border-radius:.75rem; transition:background .2s, box-shadow .2s; }
+.btn-primary { background: var(--color-primary); color:#fff; }
+.btn-primary:hover { background:#e2205c; }
+.btn-outline { background:transparent; color:var(--color-text); border:1px solid var(--color-border); }
+.btn-outline:hover { background:var(--color-surface); }
+.glow-primary { box-shadow:0 0 0 0 rgba(255,39,104,0.7); animation:glow 2.4s ease-in-out infinite; }
+@keyframes glow { 0%,100% { box-shadow:0 0 8px 2px rgba(255,39,104,0.4);} 50% { box-shadow:0 0 18px 6px rgba(255,39,104,0.7);} }
+
+/* Theming helpers */
+.text-gradient-primary {
+	background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+	color: transparent;
+}
+.btn-glow { box-shadow: 0 0 20px var(--color-primary); }
+
+/* Brutalist radii */
+:root { --radius-sm:0px; --radius-md:2px; --radius-lg:4px; }
+.card { border-radius: var(--radius-sm); }
+
+/* Gradients & brutalist radius tokens */
+.text-gradient-primary { background:linear-gradient(135deg,var(--color-primary),var(--color-accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.btn-glow { box-shadow:0 0 20px var(--color-primary); }
+:root { --radius-sm:0px; --radius-md:2px; --radius-lg:4px; }
+.card-brutal { border-radius:var(--radius-sm); }
+
+/* Type & rhythm */
+h1,h2,h3 { letter-spacing: -0.02em; }
+a { text-underline-offset: 2px; }
+
+/* Focus for accessibility */
+:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+
+/* Cards & surfaces */
+.card {
+	border-radius: 1rem; /* matches rounded-2xl */
+	border: 1px solid rgb(38 38 38 / 1); /* neutral-800 */
+	background: rgb(10 10 10 / 1); /* neutral-950 approximation */
+}

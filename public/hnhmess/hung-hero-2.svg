@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1500" viewBox="0 0 1200 1500">
+  <rect width="100%" height="100%" fill="#111"/>
+  <text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" font-size="140" font-family="system-ui, -apple-system" fill="#FF2768" fill-opacity="0.55">DETAIL</text>
+  <text x="50%" y="65%" dominant-baseline="middle" text-anchor="middle" font-size="32" font-family="system-ui, -apple-system" fill="#6AE3FF" fill-opacity="0.7">Placeholder • hung-hero-2.jpg</text>
+</svg>

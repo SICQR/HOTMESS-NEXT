@@ -1,0 +1,23 @@
+[
+  {
+    "id": "ldn01",
+    "city": "london",
+    "title": "HOTMESS London Night",
+    "tg_room_id": "-100123456",
+    "public": true
+  },
+  {
+    "id": "man01",
+    "city": "manchester",
+    "title": "HOTMESS Manchester",
+    "tg_room_id": "-100234567",
+    "public": true
+  },
+  {
+    "id": "tor01",
+    "city": "torremolinos",
+    "title": "HOTMESS Torremolinos",
+    "tg_room_id": "-100345678",
+    "public": true
+  }
+]

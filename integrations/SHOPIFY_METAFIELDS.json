@@ -1,0 +1,6 @@
+{
+  "radio_show_handle": "string",
+  "affiliate_promo_tag": "string",
+  "qr_code_slug": "string",
+  "care_category": "boolean"
+}

@@ -1,0 +1,52 @@
+{
+  "folders": [
+    {
+      "name": "HOTMESS Next.js App",
+      "path": "."
+    }
+  ],
+  "settings": {
+    "typescript.preferences.root": "./",
+    "eslint.workingDirectories": ["./"],
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/dist": true,
+      "**/.next": true,
+      "**/build": true,
+      "**/HOTMESS-NEXT": true,
+      "**/New Folder With Items": true
+    },
+    "files.exclude": {
+      "**/node_modules": true,
+      "**/.next": true,
+      "**/HOTMESS-NEXT": true,
+      "**/New Folder With Items": true
+    },
+    "typescript.suggest.autoImports": true,
+    "typescript.preferences.includePackageJsonAutoImports": "on",
+    "emmet.includeLanguages": {
+      "typescript": "html",
+      "typescriptreact": "html"
+    },
+    "git.ignoreLimitWarning": true,
+    "deno.enable": true,
+    "deno.enablePaths": [
+      "edge"
+    ],
+    "deno.lint": true,
+    "deno.unstable": false,
+    "deno.suggest.imports.hosts": {
+      "https://deno.land": true,
+      "https://esm.sh": true
+    }
+  },
+  "extensions": {
+    "recommendations": [
+      "ms-vscode.vscode-typescript-next",
+      "bradlc.vscode-tailwindcss",
+      "esbenp.prettier-vscode",
+      "ms-vscode.vscode-eslint",
+      "denoland.vscode-deno"
+    ]
+  }
+}

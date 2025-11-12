@@ -1,0 +1,96 @@
+{
+  "site": {
+    "required": [
+      "BOT_BASE_URL",
+      "TELEGRAM_NOTIFY_SECRET",
+      "INTERNAL_PARTNER_SECRET",
+      "LINK_SIGNING_SECRET",
+      "NEXT_PUBLIC_BOT_USERNAME",
+      "NEXT_PUBLIC_BOT_CHANNEL_URL",
+      "NEXT_PUBLIC_SUPABASE_URL",
+      "NEXT_PUBLIC_SUPABASE_ANON_KEY"
+    ],
+    "optional": [
+      "NEXT_PUBLIC_SITE_URL",
+      "SUPABASE_URL",
+      "SUPABASE_SERVICE_ROLE",
+      "SHOPIFY_STORE_DOMAIN",
+      "SHOPIFY_STOREFRONT_TOKEN",
+      "SHOPIFY_ADMIN_API_TOKEN",
+      "STRIPE_SECRET_KEY",
+      "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY",
+      "STRIPE_WEBHOOK_SECRET",
+      "NEXTAUTH_URL",
+      "NEXTAUTH_SECRET",
+      "SENTRY_DSN",
+      "POSTHOG_API_KEY",
+      "NEXT_PUBLIC_POSTHOG_KEY",
+      "GOOGLE_CLIENT_ID",
+      "GOOGLE_CLIENT_SECRET",
+      "GITHUB_ID",
+      "GITHUB_SECRET"
+    ],
+    "formatHints": {
+      "BOT_BASE_URL": "^https?://",
+      "TELEGRAM_NOTIFY_SECRET": "^[0-9a-fA-F]{64}$",
+      "INTERNAL_PARTNER_SECRET": ".{16,}",
+      "LINK_SIGNING_SECRET": "^[0-9a-fA-F]{64}$",
+      "NEXT_PUBLIC_BOT_CHANNEL_URL": "^https://t\\.me/",
+      "NEXT_PUBLIC_SUPABASE_URL": "^https://",
+      "NEXT_PUBLIC_SUPABASE_ANON_KEY": ".{20,}",
+      "SUPABASE_URL": "^https://",
+      "SUPABASE_SERVICE_ROLE": ".{20,}",
+      "NEXT_PUBLIC_SITE_URL": "^https?://",
+      "SHOPIFY_STORE_DOMAIN": "\\.myshopify\\.com$",
+      "SHOPIFY_STOREFRONT_TOKEN": "^[A-Za-z0-9_\\-]{20,}$",
+      "SHOPIFY_ADMIN_API_TOKEN": "^[A-Za-z0-9_\\-]{20,}$",
+      "STRIPE_SECRET_KEY": "^sk_(live|test)_[A-Za-z0-9]{10,}$",
+      "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY": "^pk_(live|test)_[A-Za-z0-9]{10,}$",
+      "STRIPE_WEBHOOK_SECRET": "^whsec_[A-Za-z0-9]{20,}$",
+      "NEXTAUTH_URL": "^https?://",
+      "NEXTAUTH_SECRET": ".{20,}",
+      "SENTRY_DSN": "^https?://",
+      "POSTHOG_API_KEY": "^[A-Za-z0-9_\\-]{10,}$",
+      "NEXT_PUBLIC_POSTHOG_KEY": "^[A-Za-z0-9_\\-]{10,}$",
+      "GOOGLE_CLIENT_ID": "^[0-9]+\\-[a-z0-9\\-]+\\.apps\\.googleusercontent\\.com$",
+      "GOOGLE_CLIENT_SECRET": "^[A-Za-z0-9_\\-]{20,}$",
+      "GITHUB_ID": "^[0-9a-f]{6,}$",
+      "GITHUB_SECRET": "^[A-Za-z0-9_\\-]{20,}$"
+    }
+  },
+  "bot": {
+    "required": [
+      "HOTMESS_ACTIVE_BOT",
+      "TELEGRAM_NOTIFY_SECRET",
+      "LINK_SIGNING_SECRET",
+      "SITE_BASE_URL",
+      "BOT_USERNAME",
+      "BOT_CHANNEL_URL"
+    ],
+    "optional": [
+      "HOTMESS_NEW_BOT_TOKEN",
+      "HOTMESS_RADIO_BOT_TOKEN",
+      "HOTMESS_RADIO_BOT_TOKEN_v2",
+      "HOTMESS_PLAYGROUND_BOT_TOKEN",
+      "BOT_USERNAME_NEW",
+      "BOT_USERNAME_RADIO",
+      "BOT_USERNAME_RADIO_V2",
+      "BOT_USERNAME_PLAYGROUND",
+      "TELEGRAM_WEBHOOK_SECRET",
+      "TELEGRAM_ALLOWED_CHATS"
+    ],
+    "formatHints": {
+      "HOTMESS_ACTIVE_BOT": "^(radio|radio_v2|new|playground)$",
+      "HOTMESS_NEW_BOT_TOKEN": "^[0-9]+:[A-Za-z0-9_\\-]{20,}$",
+      "HOTMESS_RADIO_BOT_TOKEN": "^[0-9]+:[A-Za-z0-9_\\-]{20,}$",
+      "HOTMESS_RADIO_BOT_TOKEN_v2": "^[0-9]+:[A-Za-z0-9_\\-]{20,}$",
+      "HOTMESS_PLAYGROUND_BOT_TOKEN": "^[0-9]+:[A-Za-z0-9_\\-]{20,}$",
+      "TELEGRAM_NOTIFY_SECRET": "^[0-9a-fA-F]{64}$",
+      "LINK_SIGNING_SECRET": "^[0-9a-fA-F]{64}$",
+      "SITE_BASE_URL": "^https?://",
+      "BOT_USERNAME": "_bot$",
+      "BOT_CHANNEL_URL": "^https://t\\.me/",
+      "TELEGRAM_ALLOWED_CHATS": "^(@|\\-)[A-Za-z0-9_\\-]+(,(@|\\-)[A-Za-z0-9_\\-]+)*$"
+    }
+  }
+}
