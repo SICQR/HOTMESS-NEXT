@@ -126,7 +126,6 @@ node scripts/sign-go.js --partner hotmess --offer care --to https://hotmess.lond
 - HMAC signed QR links; `/r` verifies signature; `/go` allows only allowlisted external hosts.
 - Secrets never in client; only `NEXT_PUBLIC_*` is exposed. Server/edge secrets remain private.
 - Logging: optional `LOGTAIL_SOURCE_TOKEN` for structured logs (client → `/api/log` → sink; server can post directly).
-- Security headers enforced via global middleware (CSP nonce, Referrer-Policy, X-Frame-Options, Permissions-Policy). `/.well-known/security.txt` served.
  - Security headers enforced via global proxy (`proxy.ts`) with CSP nonce, Referrer-Policy, X-Frame-Options, Permissions-Policy. `/.well-known/security.txt` served.
 ### HMAC Verification
 Secure affiliate link verification using HMAC signatures:
