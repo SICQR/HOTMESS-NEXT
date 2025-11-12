@@ -1,11 +1,9 @@
-name: Vercel Deploy
+name: Deploy to Vercel on push
 
 on:
   push:
     branches:
       - main
-      - develop
-      - feature/**
 
 concurrency:
   group: vercel-${{ github.ref }}
