@@ -177,6 +177,8 @@ Design tokens live in `app/globals.css`.
 --color-bg:#0A0A0A; --color-surface:#121212; --color-border:#262626; --color-text:#FFFFFF;
 --color-text-muted:#B3B3B3; --color-primary:#FF2768; --color-accent:#6AE3FF;
 --radius-sm:0px; --radius-md:2px; --radius-lg:4px;
+/* semantic */ --color-success:#00FF88; --color-warning:#FFB800; --color-error:#FF2768; --color-info:#6AE3FF;
+/* spacing */ --spacing-xs:0.5rem; --spacing-sm:1rem; --spacing-md:1.5rem; --spacing-lg:2rem; --spacing-xl:3rem; --spacing-2xl:4rem;
 ```
 Gradients & glow utilities:
 ```css
@@ -184,6 +186,7 @@ Gradients & glow utilities:
 .btn-glow{box-shadow:0 0 20px var(--color-primary)}
 .bg-gradient-brand{background-image:linear-gradient(135deg,var(--color-primary),var(--color-accent))}
 .border-neon{border:1px solid var(--color-primary);box-shadow:0 0 10px var(--color-primary)}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 ```
 
 ## Performance tactics
