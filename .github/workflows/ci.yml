@@ -18,21 +18,10 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Ensure pnpm is available
-        id: ensure-pnpm
-        run: |
-          # Activate corepack and prepare pnpm shim for the exact version used in repo
-          corepack enable || true
-          corepack prepare pnpm@9.0.0 --activate || true
-
-          # Fallback: install pnpm globally if corepack didn't provide it
-          if ! command -v pnpm >/dev/null 2>&1; then
-            echo "pnpm not found via corepack, installing globally..."
-            npm install -g pnpm@9.0.0
-          fi
-
-          # Verify pnpm is installed and print its version (fail fast if not present)
-          pnpm -v
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
 
       - name: Get pnpm store directory
         id: pnpm-cache
