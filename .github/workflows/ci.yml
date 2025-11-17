@@ -18,21 +18,10 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Ensure pnpm is available
-        id: ensure-pnpm
-        run: |
-          # Activate corepack and prepare pnpm shim for the exact version used in repo
-          corepack enable || true
-          corepack prepare pnpm@9.0.0 --activate || true
-
-          # Fallback: install pnpm globally if corepack didn't provide it
-          if ! command -v pnpm >/dev/null 2>&1; then
-            echo "pnpm not found via corepack, installing globally..."
-            npm install -g pnpm@9.0.0
-          fi
-
-          # Verify pnpm is installed and print its version (fail fast if not present)
-          pnpm -v
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: '9'
 
       - name: Get pnpm store directory
         id: pnpm-cache
@@ -63,18 +52,34 @@ jobs:
             next-cache-${{ runner.os }}-
       - name: Typecheck
         run: |
-          if [ "${{ steps.install.outputs.using }}" = "pnpm" ]; then pnpm run typecheck; else npm run typecheck; fi
+          if [ "${{ steps.install.outputs.using }}" = "pnpm" ]; then
+            pnpm run typecheck
+          else
+            npm run typecheck
+          fi
       - name: Lint
         run: |
-          if [ "${{ steps.install.outputs.using }}" = "pnpm" ]; then pnpm run lint; else npm run lint; fi
+          if [ "${{ steps.install.outputs.using }}" = "pnpm" ]; then
+            pnpm run lint
+          else
+            npm run lint
+          fi
       - name: Test
         run: |
-          if [ "${{ steps.install.outputs.using }}" = "pnpm" ]; then pnpm run test:ci; else npm run test:ci; fi
+          if [ "${{ steps.install.outputs.using }}" = "pnpm" ]; then
+            pnpm run test:ci
+          else
+            npm run test:ci
+          fi
       - name: Build (safe mode)
         env:
           NEXT_SAFE_MODE: '1'
         run: |
-          if [ "${{ steps.install.outputs.using }}" = "pnpm" ]; then pnpm run build; else npm run build; fi
+          if [ "${{ steps.install.outputs.using }}" = "pnpm" ]; then
+            pnpm run build
+          else
+            npm run build
+          fi
       - name: Deploy to Vercel (production)
         if: github.ref == 'refs/heads/main'
         run: curl -sS -X POST "$VERCEL_DEPLOY_HOOK"
