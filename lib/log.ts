@@ -7,13 +7,31 @@ let productionWarningEmitted = false;
 
 function sendToSink(level: string, payload: any) {
   const redacted = redactEntry(payload);
+  const body = JSON.stringify({ level, ...redacted });
 
   // If a real sink is configured, send redacted structured JSON there.
   if (LOGTAIL_TOKEN) {
-    const body = JSON.stringify({ level, ...redacted });
-    // TODO: post to https://in.logtail.com/ with LOGTAIL_TOKEN
-    // Example (uncomment and implement if fetch is available in runtime):
-    // fetch('https://in.logtail.com/', { method: 'POST', body, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${LOGTAIL_TOKEN}` } });
+    try {
+      if (typeof fetch === 'function') {
+        // fire-and-forget; best-effort to not block
+        fetch('https://in.logtail.com/', {
+          method: 'POST',
+          body,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${LOGTAIL_TOKEN}`,
+          },
+        }).catch(() => {
+          // swallow to avoid crashing caller
+        });
+      } else {
+        // runtime does not expose fetch; skip sending but log locally redacted
+        console.debug('[LOG] fetch not available; would send to Logtail:', body);
+      }
+    } catch (e) {
+      // swallow any unexpected errors from posting logs
+      console.error('[LOG] failed to send structured log to sink');
+    }
     return;
   }
 
