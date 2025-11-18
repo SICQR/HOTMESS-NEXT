@@ -1,24 +1,25 @@
-import { POST } from '../../../app/api/qr/rewards/route';
+import { POST } from '../../app/api/qr/rewards/route';
 
-function makeRequest(body: any) {
-  return new Request('http://localhost/api/qr/rewards', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  }) as unknown as Request;
+function makeRequest(body: Record<string, unknown>) {
+  const jsonStr = JSON.stringify(body);
+  return {
+    text: async () => jsonStr,
+    url: 'http://localhost/api/qr/rewards',
+    headers: new Headers({ 'Content-Type': 'application/json' }),
+  } as unknown as Request;
 }
 
 describe('QR rewards route - UUID enforcement', () => {
-  const OLD_NODE_ENV = process.env.NODE_ENV;
+  const OLD_FORCE = process.env.FORCE_QR_PROD;
   const OLD_ALLOW = process.env.NEXT_PUBLIC_ALLOW_MOCK_IDS;
 
   afterEach(() => {
-    process.env.NODE_ENV = OLD_NODE_ENV;
+  process.env.FORCE_QR_PROD = OLD_FORCE;
     process.env.NEXT_PUBLIC_ALLOW_MOCK_IDS = OLD_ALLOW;
   });
 
   test('rejects non-UUID userId in production when NEXT_PUBLIC_ALLOW_MOCK_IDS != 1', async () => {
-    process.env.NODE_ENV = 'production';
+    process.env.FORCE_QR_PROD = '1';
     delete process.env.NEXT_PUBLIC_ALLOW_MOCK_IDS;
 
     const req = makeRequest({ userId: 'not-a-uuid' });
@@ -30,7 +31,7 @@ describe('QR rewards route - UUID enforcement', () => {
   });
 
   test('accepts UUID userId in production', async () => {
-    process.env.NODE_ENV = 'production';
+    process.env.FORCE_QR_PROD = '1';
     delete process.env.NEXT_PUBLIC_ALLOW_MOCK_IDS;
 
     const uuid = '123e4567-e89b-12d3-a456-426614174000';
@@ -42,7 +43,7 @@ describe('QR rewards route - UUID enforcement', () => {
   });
 
   test('bypasses enforcement when NEXT_PUBLIC_ALLOW_MOCK_IDS=1', async () => {
-    process.env.NODE_ENV = 'production';
+    process.env.FORCE_QR_PROD = '1';
     process.env.NEXT_PUBLIC_ALLOW_MOCK_IDS = '1';
 
     const req = makeRequest({ userId: 'not-a-uuid' });
