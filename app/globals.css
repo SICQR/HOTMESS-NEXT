@@ -1,7 +1,5 @@
-/* Tailwind directives (build-time transformed) */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Tailwind v4 CSS import */
+@import "tailwindcss";
 
 /* Base */
 html, body { scroll-behavior: smooth; background: var(--color-bg); color: var(--color-text); }
