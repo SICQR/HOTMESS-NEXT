@@ -42,6 +42,22 @@ html, body { scroll-behavior: smooth; background: var(--color-bg); color: var(--
 	--bp-sm:640px; --bp-md:768px; --bp-lg:1024px; --bp-xl:1280px; --bp-2xl:1536px;
 	/* Brutalist radii */
 	--radius-sm:0px; --radius-md:2px; --radius-lg:4px;
+	
+	/* HOTMESS aliases for overrides */
+	--hm-color-border: var(--color-border);
+	--hm-color-primary: var(--color-primary);
+	--hm-color-accent: var(--color-accent);
+	--hm-text-body-size: 1rem;
+	--hm-text-body-line: 1.5;
+	--hm-text-body-weight: 400;
+	--hm-text-small-size: 0.875rem;
+	--hm-text-small-line: 1.4;
+	--hm-text-small-weight: 400;
+	--hm-font-mono: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
+	--hm-text-mono-size: 0.875rem;
+	--hm-text-mono-line: 1.5;
+	--hm-text-mono-weight: 400;
+	--font-weight-medium: 500;
 }
 
 body { font-family: var(--font-family-body); line-height: var(--line-height-body); }
