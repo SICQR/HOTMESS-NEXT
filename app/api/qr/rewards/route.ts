@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const redeemSchema = z.object({
-      userId: z.string().uuid('Invalid user ID'),
+      userId: z.string().min(1, 'User ID required'),
       pointsToRedeem: z.number().min(1, 'Must redeem at least 1 point'),
       rewardType: z.string().min(1, 'Reward type required'),
     });
@@ -82,6 +82,14 @@ export async function POST(request: NextRequest) {
     }
 
     const { userId, pointsToRedeem, rewardType } = result.data;
+
+    // In production require UUID userId to avoid accidental non-auth usage
+    if (process.env.NODE_ENV === 'production') {
+      const ok = z.string().uuid().safeParse(userId).success;
+      if (!ok) {
+        return NextResponse.json({ success: false, error: 'Invalid user ID format' }, { status: 400 });
+      }
+    }
 
     // Get user's current total points
     const { data: rewards, error: rewardsError } = await supabase

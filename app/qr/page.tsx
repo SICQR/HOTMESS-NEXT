@@ -28,7 +28,7 @@ export default function QRPage() {
     if (typeof window !== 'undefined') {
       let storedId = localStorage.getItem('mock_user_id');
       if (!storedId) {
-        storedId = `user_${Math.random().toString(36).substr(2, 9)}`;
+        storedId = (crypto && typeof crypto.randomUUID === 'function') ? crypto.randomUUID() : `user_${Math.random().toString(36).substr(2,9)}`;
         localStorage.setItem('mock_user_id', storedId);
       }
       return storedId;

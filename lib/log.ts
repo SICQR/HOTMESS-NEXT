@@ -32,8 +32,44 @@ class Logger {
           });
           return;
         }
-  // Fallback to console if no sink configured
-  console.log(JSON.stringify(entry));
+        
+        // Redact helper for sensitive data
+        function redact(obj: unknown): unknown {
+          try {
+            const s = JSON.parse(JSON.stringify(obj));
+            const redactRec = (o: Record<string, unknown>) => {
+              if (o && typeof o === 'object') {
+                for (const k of Object.keys(o)) {
+                  try {
+                    const v = o[k];
+                    if (typeof k === 'string' && /secret|token|password|key|authorization|_key/i.test(k)) {
+                      o[k] = '[REDACTED]';
+                    } else if (v && typeof v === 'object') {
+                      redactRec(v as Record<string, unknown>);
+                    }
+                  } catch {
+                    // ignore redaction errors for individual fields
+                  }
+                }
+              }
+            };
+            redactRec(s);
+            return s;
+          } catch {
+            return '[UNREDACTABLE]';
+          }
+        }
+
+        // If no external sink configured, handle based on environment
+        if (process.env.NODE_ENV === 'development') {
+          console.debug('[logger] redacted entry', redact(entry));
+        } else {
+          // In production, do not print raw entries; record a one-time warning
+          if (!(globalThis as { __HOTMESS_LOG_SINK_MISSING_WARNED?: boolean }).__HOTMESS_LOG_SINK_MISSING_WARNED) {
+            console.error('[logger] external log sink not configured; logs are being dropped');
+            (globalThis as { __HOTMESS_LOG_SINK_MISSING_WARNED?: boolean }).__HOTMESS_LOG_SINK_MISSING_WARNED = true;
+          }
+        }
         return;
       }
       // Client-side: POST to internal API to avoid exposing tokens
@@ -59,16 +95,12 @@ class Logger {
 
     // In development, use console
     if (process.env.NODE_ENV === 'development') {
-      const logMethod = level === 'error' ? console.error : 
-                       level === 'warn' ? console.warn :
-                       level === 'debug' ? console.debug :
-                       console.log;
-      
+      const logMethod = level === 'error' ? console.error : level === 'warn' ? console.warn : level === 'debug' ? console.debug : console.log;
       logMethod(`[${level.toUpperCase()}]`, message, meta || '');
       return;
     }
 
-    // In production, forward to external sink or API route
+    // In production, forward to external sink (above handles redaction/warning)
     void this.sendToExternal(entry);
   }
 
