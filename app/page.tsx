@@ -2,7 +2,7 @@
 import React from 'react';
 import Marquee from '@/components/Marquee';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
+import MagneticButton from '@/components/MagneticButton';
 import { Card, CardContent } from '@/components/ui/card';
 import { createFadeUp } from '@/lib/motion';
 import FadeIn from '@/components/FadeIn';
@@ -66,16 +66,16 @@ export default function Home() {
             }}
           />
         )}
-        <motion.h1 id="hero-title" variants={fadeUp} initial="hidden" animate="show" className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold mb-6 tracking-tight leading-[0.9]">
+        <motion.h1 id="hero-title" variants={fadeUp} initial="hidden" animate="show" className="text-gradient-primary text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold mb-6 tracking-tight leading-[0.9]">
           HOTMESS LONDON
         </motion.h1>
         <motion.p variants={fadeUp} initial="hidden" animate="show" transition={{ delay: 0.2 }} className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-300 max-w-3xl">
           Men-only ecosystem — Radio, Records, Lube, Care. Care-first. Bold. Responsible.
         </motion.p>
         <div className="flex flex-wrap gap-4 mt-12 justify-center" aria-label="Primary call to actions">
-          <Button href="/shop" asChild prefetch className="bg-red-600 hover:bg-red-700 text-sm sm:text-base md:text-lg px-6 md:px-8 py-3 md:py-4 font-bold tracking-wide">EXPLORE ECOSYSTEM</Button>
-          <Button variant="outline" href="/radio" asChild prefetch className="text-sm sm:text-base md:text-lg px-6 md:px-8 py-3 md:py-4">LISTEN LIVE</Button>
-          <Button variant="ghost" href="/about" asChild prefetch className="text-sm sm:text-base md:text-lg px-4 md:px-6 py-3 md:py-4">Learn More →</Button>
+          <MagneticButton href="/shop" className="text-sm sm:text-base md:text-lg px-6 md:px-8 py-3 md:py-4" variant="primary">EXPLORE ECOSYSTEM</MagneticButton>
+          <MagneticButton href="/radio" className="text-sm sm:text-base md:text-lg px-6 md:px-8 py-3 md:py-4" variant="outline">LISTEN LIVE</MagneticButton>
+          <MagneticButton href="/about" className="text-sm sm:text-base md:text-lg px-4 md:px-6 py-3 md:py-4" variant="ghost">Learn More →</MagneticButton>
         </div>
         <motion.div
           className="absolute inset-0 pointer-events-none"
@@ -95,7 +95,7 @@ export default function Home() {
                 <CardContent className="p-8">
                   <h3 className="text-2xl font-semibold mb-2">{item.title}</h3>
                   <p className="text-gray-400 mb-4">{item.desc}</p>
-                  <Button variant="ghost" href={item.link} asChild prefetch className="px-0">Explore</Button>
+                  <MagneticButton href={item.link} variant="ghost" className="px-0">Explore</MagneticButton>
                 </CardContent>
               </Card>
             </FadeIn>
@@ -112,7 +112,7 @@ export default function Home() {
               <div className="rounded-2xl border border-neutral-800 bg-neutral-950 p-8 hover:bg-neutral-900 transition" role="listitem">
               <h3 className="text-2xl font-semibold mb-2">{show.title}</h3>
               <p className="text-gray-400 mb-4">{show.desc}</p>
-              <Button variant="ghost" href={show.link} asChild prefetch className="px-0">Listen</Button>
+              <MagneticButton href={show.link} variant="ghost" className="px-0">Listen</MagneticButton>
               </div>
             </FadeIn>
           ))}
@@ -125,7 +125,7 @@ export default function Home() {
         <p className="text-gray-400 max-w-2xl mx-auto mb-8">
           Built by one man with a mission: make queer care real, raw, and responsible. HOTMESS exists for those who live loud, love harder, and clean up after.
         </p>
-        <Button href="/about" asChild prefetch className="bg-red-600 hover:bg-red-700">Read the Manifesto</Button>
+  <MagneticButton href="/about" variant="primary" className="px-6 py-3">Read the Manifesto</MagneticButton>
       </section>
 
       <div className="px-6 max-w-5xl mx-auto">

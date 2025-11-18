@@ -1,30 +1,23 @@
 import { z } from 'zod';
 import { logger } from '../../../../lib/log';
 
-// Helper: parse raw body safely in varied test/runtime environments
-async function readJson(request: Request): Promise<any> {
+// Narrow JSON shape expected for POST body
+interface QRRewardsBody {
+  userId?: string;
+  // future: points?: number; etc.
+  [key: string]: unknown;
+}
+
+// Helper: parse raw body safely in varied test/runtime environments (no stream fallback needed)
+async function readJson(request: Request): Promise<QRRewardsBody> {
   try {
-    let raw = '';
-    try {
-      raw = await request.text();
-    } catch {
-      raw = '';
-    }
-    if (!raw && (request as any).body) {
-      // Attempt manual stream read
-      const reader = (request as any).body.getReader?.();
-      if (reader) {
-        const chunks: Uint8Array[] = [];
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          if (value) chunks.push(value);
-        }
-        raw = new TextDecoder().decode(Buffer.concat(chunks as any));
-      }
-    }
+    const raw = await request.text();
     if (!raw) return {};
-    return JSON.parse(raw);
+    const parsed: unknown = JSON.parse(raw);
+    if (parsed && typeof parsed === 'object') {
+      return parsed as QRRewardsBody;
+    }
+    return {};
   } catch {
     return {};
   }
