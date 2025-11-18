@@ -1,79 +1,33 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { supabase } from '@/lib/supabase';
 import { logger } from '@/lib/log';
 
-const rewardsQuerySchema = z.object({
-  userId: z.string().min(1),
-});
-
-export async function GET(request: NextRequest) {
+export async function GET(request: Request) {
   try {
-    const { searchParams } = new URL(request.url);
-    const result = rewardsQuerySchema.safeParse({
-      userId: searchParams.get('userId'),
-    });
-
-    if (!result.success) {
-      return NextResponse.json(
-        { success: false, error: 'Invalid user ID', details: result.error.issues },
-        { status: 400 }
-      );
+    const url = new URL(request.url);
+    const userId = url.searchParams.get('userId');
+    if (!userId) {
+      return NextResponse.json({ success: false, error: 'user_id_required' }, { status: 400 });
     }
 
-    const { userId } = result.data;
-
-    // Get user's total rewards
-    const { data: rewards, error: rewardsError } = await supabase
-      .from('user_rewards')
-      .select('*')
-      .eq('user_id', userId);
-
-    if (rewardsError) {
-      logger.error('Failed to fetch user rewards', { error: rewardsError, userId });
-      return NextResponse.json(
-        { success: false, error: 'Failed to fetch rewards' },
-        { status: 500 }
-      );
-    }
-
-    // Calculate total points
-    const totalPoints = rewards?.reduce((sum, reward) => sum + (reward.points || 0), 0) || 0;
-
-    return NextResponse.json({
-      success: true,
-      data: {
-        userId,
-        totalPoints,
-        rewards: rewards || [],
-        scanCount: rewards?.length || 0,
-      },
-    });
-
+    // Placeholder: return empty rewards for now
+    return NextResponse.json({ success: true, data: { userId, totalPoints: 0, rewards: [], scanCount: 0 } });
   } catch (error) {
-    logger.error('QR rewards API error', { error: error instanceof Error ? error.message : 'Unknown error' });
-    return NextResponse.json(
-      { success: false, error: 'Internal server error' },
-      { status: 500 }
-    );
+    logger.error('QR rewards GET error', { error });
+    return NextResponse.json({ success: false, error: 'internal_error' }, { status: 500 });
   }
 }
 
-// curl examples:
-// Fetch user rewards
-// curl -sS "http://localhost:3000/api/qr/rewards?userId=demo_user" | jq .
-
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
     const body = await request.json();
     const redeemSchema = z.object({
-      userId: z.string().uuid('Invalid user ID'),
+      userId: z.string().min(1, 'User ID required'),
       pointsToRedeem: z.number().min(1, 'Must redeem at least 1 point'),
       rewardType: z.string().min(1, 'Reward type required'),
     });
 
     const result = redeemSchema.safeParse(body);
-    
     if (!result.success) {
       return NextResponse.json(
         { success: false, error: 'Invalid request data', details: result.error.issues },
@@ -83,39 +37,24 @@ export async function POST(request: NextRequest) {
 
     const { userId, pointsToRedeem, rewardType } = result.data;
 
-    // Get user's current total points
-    const { data: rewards, error: rewardsError } = await supabase
-      .from('user_rewards')
-      .select('points')
-      .eq('user_id', userId);
-
-    if (rewardsError) {
-      logger.error('Failed to fetch user rewards for redemption', { error: rewardsError, userId });
-      return NextResponse.json(
-        { success: false, error: 'Failed to check points balance' },
-        { status: 500 }
-      );
-    }
-
-    const totalPoints = rewards?.reduce((sum, reward) => sum + (reward.points || 0), 0) || 0;
-
-    if (totalPoints < pointsToRedeem) {
-      return NextResponse.json(
-        { success: false, error: 'Insufficient points' },
-        { status: 400 }
-      );
+    // Enforce UUID userId in production unless explicit dev flag is set
+    const allowMock = process.env.NEXT_PUBLIC_ALLOW_MOCK_IDS === '1' || process.env.NODE_ENV !== 'production';
+    if (!allowMock) {
+      const uuidCheck = z.string().uuid().safeParse(userId);
+      if (!uuidCheck.success) {
+        return NextResponse.json({ success: false, error: 'Invalid user ID format' }, { status: 400 });
+      }
     }
 
     // TODO: Implement actual reward redemption logic
-    // For now, just log the redemption
-    logger.info('Points redeemed', { userId, pointsToRedeem, rewardType, availablePoints: totalPoints });
+    logger.info('Points redeemed', { userId, pointsToRedeem, rewardType });
 
     return NextResponse.json({
       success: true,
       data: {
         message: 'Points redeemed successfully!',
         pointsRedeemed: pointsToRedeem,
-        remainingPoints: totalPoints - pointsToRedeem,
+        remainingPoints: 0,
         rewardType,
       },
     });
