@@ -6,7 +6,6 @@ import { createHmac } from "crypto";
  * doesn't fail when @vercel/node types are not installed.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  // existing implementation preserved; example:
   try {
     const secret = process.env.HMAC_SECRET ?? "";
     const payload = JSON.stringify(req.body ?? {});
