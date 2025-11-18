@@ -1,4 +1,5 @@
 import "./globals.css";
+import "../styles/hotmess-overrides.css";
 import { Suspense } from "react";
 import { headers } from "next/headers";
 import type { Metadata, Viewport } from "next";
