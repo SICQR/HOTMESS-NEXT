@@ -46,7 +46,7 @@ export function createFadeUp(prefersReducedOrDelay: boolean | number = 0, distan
       transition: {
         duration,
         delay,
-        ease: easing,
+        ease: easing as any,
       },
     },
     exit: { opacity: 0, y: distance, transition: { duration: Math.min(0.2, duration / 2) } },
