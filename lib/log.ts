@@ -7,6 +7,40 @@ interface LogEntry {
   meta?: Record<string, unknown>;
 }
 
+const SENSITIVE_KEY_PATTERN = /secret|token|password|pass|key|authorization|ssn/i;
+const MAX_STRING_LENGTH = 500;
+
+let productionNoSinkWarned = false;
+
+/**
+ * Deep redaction of sensitive keys and truncation of long values
+ */
+export function redactEntry(obj: unknown): unknown {
+  if (obj === null || obj === undefined) return obj;
+  
+  if (typeof obj === 'string') {
+    return obj.length > MAX_STRING_LENGTH 
+      ? obj.substring(0, MAX_STRING_LENGTH) + '...[truncated]'
+      : obj;
+  }
+  
+  if (typeof obj !== 'object') return obj;
+  
+  if (Array.isArray(obj)) {
+    return obj.map(item => redactEntry(item));
+  }
+  
+  const result: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(obj)) {
+    if (SENSITIVE_KEY_PATTERN.test(key)) {
+      result[key] = '[REDACTED]';
+    } else {
+      result[key] = redactEntry(value);
+    }
+  }
+  return result;
+}
+
 class Logger {
   private getRidFromCookie(): string | undefined {
     try {
@@ -32,8 +66,20 @@ class Logger {
           });
           return;
         }
-  // Fallback to console if no sink configured
-  console.log(JSON.stringify(entry));
+        
+        // No external sink configured
+        if (process.env.NODE_ENV === 'development') {
+          // Development: show redacted logs
+          const redacted = redactEntry(entry);
+          console.debug('[LOG]', JSON.stringify(redacted));
+        } else {
+          // Production: one-time warning, then drop to avoid leaking secrets
+          if (!productionNoSinkWarned) {
+            console.error('[WARN] No log sink configured (LOGTAIL_SOURCE_TOKEN missing). Structured logs will be dropped to prevent secret leakage.');
+            productionNoSinkWarned = true;
+          }
+          // Drop the log entry
+        }
         return;
       }
       // Client-side: POST to internal API to avoid exposing tokens

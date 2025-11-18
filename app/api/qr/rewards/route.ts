@@ -66,22 +66,37 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const redeemSchema = z.object({
-      userId: z.string().uuid('Invalid user ID'),
+    
+    // Start with basic schema - userId must be a non-empty string
+    const baseSchema = z.object({
+      userId: z.string().min(1),
       pointsToRedeem: z.number().min(1, 'Must redeem at least 1 point'),
       rewardType: z.string().min(1, 'Reward type required'),
     });
 
-    const result = redeemSchema.safeParse(body);
+    const baseResult = baseSchema.safeParse(body);
     
-    if (!result.success) {
+    if (!baseResult.success) {
       return NextResponse.json(
-        { success: false, error: 'Invalid request data', details: result.error.issues },
+        { success: false, error: 'Invalid request data', details: baseResult.error.issues },
         { status: 400 }
       );
     }
 
-    const { userId, pointsToRedeem, rewardType } = result.data;
+    const { userId, pointsToRedeem, rewardType } = baseResult.data;
+
+    // In production (unless explicitly allowing mock IDs), enforce UUID format
+    if (process.env.NODE_ENV === 'production' && process.env.NEXT_PUBLIC_ALLOW_MOCK_IDS !== '1') {
+      const uuidSchema = z.string().uuid();
+      const uuidResult = uuidSchema.safeParse(userId);
+      
+      if (!uuidResult.success) {
+        return NextResponse.json(
+          { success: false, error: 'Invalid user ID format' },
+          { status: 400 }
+        );
+      }
+    }
 
     // Get user's current total points
     const { data: rewards, error: rewardsError } = await supabase

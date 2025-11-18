@@ -24,11 +24,17 @@ export default function QRPage() {
   const { push } = useToast(); // HOTMESS ADD
   const [userId] = useState(() => {
     // TODO: Get actual user ID from authentication context
-    // For now, generate a persistent mock ID
+    // For now, generate a persistent mock ID using UUID format
     if (typeof window !== 'undefined') {
       let storedId = localStorage.getItem('mock_user_id');
       if (!storedId) {
-        storedId = `user_${Math.random().toString(36).substr(2, 9)}`;
+        // Use crypto.randomUUID() for RFC-4122 compliant UUID
+        if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+          storedId = crypto.randomUUID();
+        } else {
+          // Fallback for older runtimes
+          storedId = `user_${Math.random().toString(36).substr(2, 9)}`;
+        }
         localStorage.setItem('mock_user_id', storedId);
       }
       return storedId;
