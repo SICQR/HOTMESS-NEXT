@@ -1,10 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { createHmac } from "crypto";
 
-/**
- * Keep the implementation intact — only switch types to Next.js API types so TypeScript
- * doesn't fail when @vercel/node types are not installed.
- */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const secret = process.env.HMAC_SECRET ?? "";
