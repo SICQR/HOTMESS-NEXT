@@ -31,9 +31,9 @@
     "env:doc": "pnpm run env:doctor",
     "env:docto": "pnpm run env:doctor:lenient",
     "docs:vercel": "grep -n 'Vercel Deployment Guide' README.vercel.md || echo 'Open README.vercel.md in your editor'",
-  "verify:prepush": "pnpm run env:doc && pnpm test",
-  "secret:rotate:link": "bash scripts/rotate-link-signing-secret.sh",
-  "secrets:scan": "bash scripts/scan-secrets.sh",
+    "verify:prepush": "pnpm run env:doc && pnpm test",
+    "secret:rotate:link": "bash scripts/rotate-link-signing-secret.sh",
+    "secrets:scan": "bash scripts/scan-secrets.sh",
     "env:bot:import": "ts-node --transpile-only scripts/import-bot-token-from-txt.ts"
   },
   "dependencies": {
@@ -71,15 +71,16 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/uuid": "^10.0.0",
+    "@vercel/node": "^5.5.6",
     "eslint": "^9",
     "eslint-config-next": "16.0.1",
     "jest": "^29.7.0",
     "jest-axe": "^10.0.0",
     "jest-environment-jsdom": "^29.7.0",
-    "undici": "^6.19.8",
     "tailwindcss": "^4",
     "ts-jest": "^29.4.5",
     "ts-node": "^10.9.2",
-    "typescript": "^5"
+    "typescript": "^5",
+    "undici": "^6.19.8"
   }
 }

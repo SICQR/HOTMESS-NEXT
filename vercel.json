@@ -1,8 +1,11 @@
 {
-  "framework": "nextjs",
-  "buildCommand": "pnpm run build",
-  "installCommand": "pnpm install",
-  "devCommand": "pnpm run dev",
-  "outputDirectory": ".next",
-  "ignoreCommand": "echo 'Use Vercel settings for advanced ignores'"
+  "version": 2,
+  "builds": [
+    { "src": "package.json", "use": "@vercel/static-build", "config": { "distDir": "dist" } },
+    { "src": "api/**/*.ts", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ]
 }
