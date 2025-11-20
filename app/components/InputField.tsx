@@ -44,7 +44,7 @@ type InputFieldProps = TextLikeProps | TextareaProps | SelectProps | CheckboxPro
 export default function InputField(props: InputFieldProps) {
   const labelClass = 'block text-sm font-medium text-gray-200';
   const baseClass =
-    'block w-full mt-2 px-3 py-2 bg-[#111] text-white placeholder-gray-400 border border-[#555] rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500';
+    'block w-full mt-2 px-3 py-2 bg-[var(--color-bg)] text-white placeholder-gray-400 border border-token rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]';
 
   if ('textarea' in props) {
     const { label, name, rows = 4, placeholder, required, className, value, onChange } = props;
@@ -97,7 +97,7 @@ export default function InputField(props: InputFieldProps) {
           name={name}
           type="checkbox"
           required={required}
-          className="h-4 w-4 rounded border-[#555] bg-[#111] text-pink-500 focus:ring-pink-500"
+          className="h-4 w-4 rounded border-token bg-[var(--color-bg)] text-[var(--color-primary)] focus:ring-[var(--color-primary)]"
           checked={checked}
           onChange={onChange}
         />

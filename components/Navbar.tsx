@@ -143,7 +143,7 @@ export default function Navbar() {
         ref={menuRef}
         hidden={!menuOpen}
         aria-hidden={!menuOpen}
-  className="md:hidden fixed inset-0 z-40 bg-[color:rgba(var(--color-bg-rgb)/0.90)] backdrop-blur-sm"
+  className="md:hidden fixed inset-0 z-[60] bg-[color:rgba(var(--color-bg-rgb)/0.90)] backdrop-blur-sm"
         onClick={(e) => {
           if (e.target === e.currentTarget) setMenuOpen(false);
         }}

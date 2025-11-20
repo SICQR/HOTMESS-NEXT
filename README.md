@@ -126,7 +126,6 @@ node scripts/sign-go.js --partner hotmess --offer care --to https://hotmess.lond
 - HMAC signed QR links; `/r` verifies signature; `/go` allows only allowlisted external hosts.
 - Secrets never in client; only `NEXT_PUBLIC_*` is exposed. Server/edge secrets remain private.
 - Logging: optional `LOGTAIL_SOURCE_TOKEN` for structured logs (client → `/api/log` → sink; server can post directly).
-- Security headers enforced via global middleware (CSP nonce, Referrer-Policy, X-Frame-Options, Permissions-Policy). `/.well-known/security.txt` served.
  - Security headers enforced via global proxy (`proxy.ts`) with CSP nonce, Referrer-Policy, X-Frame-Options, Permissions-Policy. `/.well-known/security.txt` served.
 ### HMAC Verification
 Secure affiliate link verification using HMAC signatures:
@@ -175,13 +174,18 @@ import { MobileMenu } from './components/MobileMenu';
 Design tokens live in `app/globals.css`.
 ```css
 --color-bg:#0A0A0A; --color-surface:#121212; --color-border:#262626; --color-text:#FFFFFF;
---color-text-muted:#999999; --color-primary:#FF2768; --color-accent:#6AE3FF;
+--color-text-muted:#B3B3B3; --color-primary:#FF2768; --color-accent:#6AE3FF;
 --radius-sm:0px; --radius-md:2px; --radius-lg:4px;
+/* semantic */ --color-success:#00FF88; --color-warning:#FFB800; --color-error:#FF2768; --color-info:#6AE3FF;
+/* spacing */ --spacing-xs:0.5rem; --spacing-sm:1rem; --spacing-md:1.5rem; --spacing-lg:2rem; --spacing-xl:3rem; --spacing-2xl:4rem;
 ```
 Gradients & glow utilities:
 ```css
 .text-gradient-primary{background:linear-gradient(135deg,var(--color-primary),var(--color-accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .btn-glow{box-shadow:0 0 20px var(--color-primary)}
+.bg-gradient-brand{background-image:linear-gradient(135deg,var(--color-primary),var(--color-accent))}
+.border-neon{border:1px solid var(--color-primary);box-shadow:0 0 10px var(--color-primary)}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 ```
 
 ## Performance tactics

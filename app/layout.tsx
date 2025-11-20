@@ -102,7 +102,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <Suspense fallback={null}>
             <Analytics />
           </Suspense>
-          <main id="main" className="min-h-screen">
+          {/* Add top padding to avoid content hidden behind fixed Navbar */}
+          <main id="main" className="min-h-screen pt-20 md:pt-24">
             {children}
           </main>
           <div className="mt-24 border-t border-neutral-800 text-center py-4 text-xs text-gray-500">

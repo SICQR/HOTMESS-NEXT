@@ -1,92 +1,64 @@
-type LogLevel = 'debug' | 'info' | 'warn' | 'error';
+import redactEntry from '../src/utils/redact';
 
-interface LogEntry {
-  level: LogLevel;
-  message: string;
-  timestamp: Date;
-  meta?: Record<string, unknown>;
-}
+const LOGTAIL_TOKEN = process.env.LOGTAIL_SOURCE_TOKEN;
+const NODE_ENV = process.env.NODE_ENV;
 
-class Logger {
-  private getRidFromCookie(): string | undefined {
+let productionWarningEmitted = false;
+
+function sendToSink(level: string, payload: any) {
+  const redacted = redactEntry(payload);
+  const body = JSON.stringify({ level, ...redacted });
+
+  // If a real sink is configured, send redacted structured JSON there.
+  if (LOGTAIL_TOKEN) {
     try {
-      if (typeof document === 'undefined') return undefined;
-      const m = document.cookie.match(/(?:^|; )hm_rid=([^;]+)/);
-      return m ? decodeURIComponent(m[1]) : undefined;
-    } catch { return undefined; }
-  }
-
-  private async sendToExternal(entry: LogEntry & { rid?: string }) {
-    try {
-      // Server-side: send directly to Logtail if token present
-      if (typeof window === 'undefined') {
-        const token = process.env.LOGTAIL_SOURCE_TOKEN;
-        if (token) {
-          await fetch('https://in.logtail.com/', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`,
-            },
-            body: JSON.stringify(entry),
-          });
-          return;
-        }
-  // Fallback to console if no sink configured
-  console.log(JSON.stringify(entry));
-        return;
+      if (typeof fetch === 'function') {
+        // fire-and-forget; best-effort to not block
+        fetch('https://in.logtail.com/', {
+          method: 'POST',
+          body,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${LOGTAIL_TOKEN}`,
+          },
+        }).catch(() => {
+          // swallow to avoid crashing caller
+        });
+      } else {
+        // runtime does not expose fetch; skip sending but log locally redacted
+        console.debug('[LOG] fetch not available; would send to Logtail:', body);
       }
-      // Client-side: POST to internal API to avoid exposing tokens
-      await fetch('/api/log', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(entry),
-        keepalive: true,
-      }).catch(() => {});
-    } catch {
-      // ignore
+    } catch (e) {
+      // swallow any unexpected errors from posting logs
+      console.error('[LOG] failed to send structured log to sink');
     }
+    return;
   }
 
-  private log(level: LogLevel, message: string, meta?: Record<string, unknown>) {
-    const entry: LogEntry & { rid?: string } = {
-      level,
-      message,
-      timestamp: new Date(),
-      meta,
-      rid: this.getRidFromCookie(),
-    };
-
-    // In development, use console
-    if (process.env.NODE_ENV === 'development') {
-      const logMethod = level === 'error' ? console.error : 
-                       level === 'warn' ? console.warn :
-                       level === 'debug' ? console.debug :
-                       console.log;
-      
-      logMethod(`[${level.toUpperCase()}]`, message, meta || '');
-      return;
+  // no sink configured:
+  if (NODE_ENV === 'production') {
+    if (!productionWarningEmitted) {
+      // one-time warning to stderr that structured logs are being dropped
+      console.error('[SECURITY] structured logs disabled (no LOGTAIL_SOURCE_TOKEN configured) - dropping structured log entries to avoid secret leakage');
+      productionWarningEmitted = true;
     }
-
-    // In production, forward to external sink or API route
-    void this.sendToExternal(entry);
+    return; // drop structured log
   }
 
-  debug(message: string, meta?: Record<string, unknown>) {
-    this.log('debug', message, meta);
-  }
-
-  info(message: string, meta?: Record<string, unknown>) {
-    this.log('info', message, meta);
-  }
-
-  warn(message: string, meta?: Record<string, unknown>) {
-    this.log('warn', message, meta);
-  }
-
-  error(message: string, meta?: Record<string, unknown>) {
-    this.log('error', message, meta);
+  // In development: emit redacted debug for developer visibility
+  try {
+    console.debug(JSON.stringify(redacted));
+  } catch (e) {
+    // best-effort logging
+    console.debug('[LOG] (redacted)');
   }
 }
 
-export const logger = new Logger();
+export const logger = {
+  debug: (msg: string, meta?: any) => sendToSink('debug', { msg, meta }),
+  info: (msg: string, meta?: any) => sendToSink('info', { msg, meta }),
+  warn: (msg: string, meta?: any) => sendToSink('warn', { msg, meta }),
+  error: (msg: string, meta?: any) => sendToSink('error', { msg, meta }),
+};
+
+export default logger;

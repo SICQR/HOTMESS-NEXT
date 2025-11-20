@@ -1,0 +1,45 @@
+/* HOTMESS overrides - sits on top of styles/globals.css */
+
+/* Keep border color + outline colour, but do NOT force borders on everything */
+*, *::before, *::after {
+  border-color: var(--hm-color-border);
+  outline-color: color-mix(in srgb, var(--hm-color-primary) 50%, transparent);
+  border-style: solid;
+  border-width: 0; /* Tailwind .border classes will override this */
+}
+
+/* Single source of truth for gradient text */
+.text-gradient-primary {
+  background: linear-gradient(135deg, var(--hm-color-primary) 0%, var(--hm-color-accent) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Base typography for key elements */
+button {
+  font-size: var(--hm-text-body-size);
+  line-height: var(--hm-text-body-line);
+  font-weight: var(--font-weight-medium);
+}
+
+input,
+textarea {
+  font-size: var(--hm-text-body-size);
+  line-height: var(--hm-text-body-line);
+  font-weight: var(--hm-text-body-weight);
+}
+
+small {
+  font-size: var(--hm-text-small-size);
+  line-height: var(--hm-text-small-line);
+  font-weight: var(--hm-text-small-weight);
+}
+
+code,
+pre {
+  font-family: var(--hm-font-mono);
+  font-size: var(--hm-text-mono-size);
+  line-height: var(--hm-text-mono-line);
+  font-weight: var(--hm-text-mono-weight);
+}
